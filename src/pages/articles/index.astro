@@ -1,0 +1,5 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro'; import ContentCard from '../../components/ContentCard.astro'; import { articles } from '../../data'; import { getCollection } from 'astro:content';
+const learningArticles = (await getCollection('articles')).map(entry => ({ ...entry.data, slug: entry.id }));
+---
+<BaseLayout title="Articles — Signal Notes"><section class="listing-hero"><p class="eyebrow">Read</p><h1>Longer thoughts<br /><em>worth keeping.</em></h1><p>Clear explanations, learning notes, and opinions formed while doing the work.</p></section><section class="latest-section listing"><div class="section-heading"><div><p class="eyebrow">AI learning series</p><h2>Start with the essentials</h2></div></div><div class="card-grid">{learningArticles.map(item => <ContentCard item={item} />)}</div></section><section class="latest-section listing external-articles"><div class="section-heading"><div><p class="eyebrow">Published work</p><h2>From the field</h2></div></div><div class="card-grid">{articles.map(item => <ContentCard item={item} />)}</div></section></BaseLayout>

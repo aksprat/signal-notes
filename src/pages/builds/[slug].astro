@@ -1,0 +1,16 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { builds } from '../../data';
+export function getStaticPaths() { return builds.map(build => ({ params: { slug: build.slug }, props: { build } })); }
+const { build } = Astro.props;
+---
+<BaseLayout title={`${build.title} — Signal Notes`} description={build.summary}>
+  <article class="article-page">
+    <a class="back-link" href="/builds">← All builds</a>
+    <p class="eyebrow">{build.status} · {build.date}</p>
+    <h1>{build.title}</h1>
+    <p class="article-summary">{build.summary}</p>
+    <div class="article-rule"></div>
+    <div class="article-body"><p>Use this space to document the question, the approach, what worked, and what you would change next. Honest project notes are often the most useful material for another learner.</p></div>
+  </article>
+</BaseLayout>
