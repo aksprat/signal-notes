@@ -130,7 +130,7 @@ const latestTwo = learningArticles.filter(a => a.slug !== featured.slug).slice(0
       <div class="about-right">
         {profile.bio.map((para: string) => <p>{para}</p>)}
         <div class="about-tags">
-          {['LLMs & GenAI', 'RAG', 'GPU Inference', 'AI Infrastructure', 'Kubernetes', 'Cloud Architecture', 'DigitalOcean', 'AWS', 'GCP', 'Azure', 'Customer Engineering'].map((tag: string) => (
+          {profile.skills.map((tag: string) => (
             <span>{tag}</span>
           ))}
         </div>

@@ -11,6 +11,7 @@ export const profile = {
   email: 'hello@example.com',
   linkedIn: 'https://www.linkedin.com/in/akshit-pratiush/',
   now: 'Helping enterprises turn complex AI and cloud requirements into production-ready systems — one field note at a time.',
+  skills: ['LLMs & GenAI', 'RAG', 'GPU Inference', 'AI Infrastructure', 'Kubernetes', 'Cloud Architecture', 'DigitalOcean', 'AWS', 'GCP', 'Azure', 'Customer Engineering'],
   bio: [
     'I am a Forward Deployed Engineer focused on helping enterprises turn complex AI and cloud requirements into production-ready systems. I work at the intersection of AI infrastructure, cloud architecture, software engineering, and customer delivery, partnering directly with customers to design, prototype, deploy, and troubleshoot real-world AI workloads.',
     'My current work spans Generative AI & LLMs (LLM application architecture, RAG, model deployment, fine-tuning, quantization, inference optimization, and AI evaluations), AI Infrastructure (GPU workload sizing, inference architecture, Kubernetes, KV cache, batching, prefill/decode latency, throughput, and context length), and Cloud & Distributed Systems across DigitalOcean, Google Cloud, Azure, and AWS.',

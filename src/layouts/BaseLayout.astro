@@ -22,8 +22,8 @@ const path = Astro.url.pathname;
         <a href="/articles" class={path.startsWith('/articles') ? 'active' : ''}>Read</a>
         <a href="/videos" class={path.startsWith('/videos') ? 'active' : ''}>Watch</a>
         <a href="/builds" class={path.startsWith('/builds') ? 'active' : ''}>Builds</a>
-        <a href="/#about" class={path === '/' ? '' : ''}>About</a>
-        <a href="/#start-here" class={path === '/' ? '' : ''}>Start here</a>
+        <a href="/#about">About</a>
+        <a href="/#start-here">Start here</a>
       </nav>
       <a class="nav-cta" href={profile.channelUrl} target="_blank" rel="noreferrer">YouTube ↗</a>
     </header>
