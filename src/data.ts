@@ -5,9 +5,17 @@ export type ContentItem = {
 
 // This is the only file you need to edit to add articles, videos, and projects.
 export const profile = {
-  name: 'Akshit Pratiush', role: 'Exploring AI in public',
-  channelUrl: 'https://www.youtube.com/@CuriousEnuf', email: 'hello@example.com',
-  now: 'Writing, building, and sharing practical lessons from AI, cloud infrastructure, and developer tools.'
+  name: 'Akshit Pratiush',
+  role: 'Forward Deployed Engineer | AI & Cloud Infrastructure | LLMs, GenAI, GPU Inference & Storage | Enterprise AI Architecture & Technical Delivery',
+  channelUrl: 'https://www.youtube.com/@CuriousEnuf',
+  email: 'hello@example.com',
+  linkedIn: 'https://www.linkedin.com/in/akshit-pratiush/',
+  now: 'Helping enterprises turn complex AI and cloud requirements into production-ready systems — one field note at a time.',
+  bio: [
+    'I am a Forward Deployed Engineer focused on helping enterprises turn complex AI and cloud requirements into production-ready systems. I work at the intersection of AI infrastructure, cloud architecture, software engineering, and customer delivery, partnering directly with customers to design, prototype, deploy, and troubleshoot real-world AI workloads.',
+    'My current work spans Generative AI & LLMs (LLM application architecture, RAG, model deployment, fine-tuning, quantization, inference optimization, and AI evaluations), AI Infrastructure (GPU workload sizing, inference architecture, Kubernetes, KV cache, batching, prefill/decode latency, throughput, and context length), and Cloud & Distributed Systems across DigitalOcean, Google Cloud, Azure, and AWS.',
+    'A significant part of my role is working closely with Product and Engineering teams — reproducing customer issues, identifying product gaps, translating field requirements into actionable technical requirements, and helping turn customer feedback into better products.',
+  ],
 };
 
 export const articles: ContentItem[] = [
