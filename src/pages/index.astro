@@ -12,10 +12,10 @@ const latestTwo = learningArticles.filter(a => a.slug !== featured.slug).slice(0
   <!-- ── Hero ─────────────────────────────────────────── -->
   <section class="hero">
     <div class="hero-inner">
-      <p class="eyebrow"><span class="pulse"></span>An open AI field journal</p>
-      <h1>Less noise.<br /><em>More signal.</em></h1>
+      <p class="eyebrow"><span class="pulse"></span>AIFieldNotes · by Akshit Pratiush</p>
+      <h1>From the<br /><em>AI frontier.</em></h1>
       <div class="hero-row">
-        <p>Notes, experiments, and clear explanations for anyone finding their footing in the world of AI.</p>
+        <p>Candid field notes, experiments, and practical guides from the frontlines of AI infrastructure, LLMs, and enterprise AI delivery.</p>
         <a class="btn" href="#start-here">Find your starting point <span class="arrow">↓</span></a>
       </div>
     </div>
@@ -113,6 +113,28 @@ const latestTwo = learningArticles.filter(a => a.slug !== featured.slug).slice(0
           <span class="path-tag">{tag} ↗</span>
         </a>
       ))}
+    </div>
+  </section>
+
+  <!-- ── About ─────────────────────────────────────────── -->
+  <section class="section" id="about">
+    <div class="about-grid">
+      <div class="about-left">
+        <p class="eyebrow blue"><span class="pulse"></span>About me</p>
+        <h2>Akshit Pratiush</h2>
+        <p class="about-role">{profile.role}</p>
+        <a class="btn about-linkedin" href={profile.linkedIn} target="_blank" rel="noreferrer">
+          LinkedIn ↗
+        </a>
+      </div>
+      <div class="about-right">
+        {profile.bio.map((para: string) => <p>{para}</p>)}
+        <div class="about-tags">
+          {profile.skills.map((tag: string) => (
+            <span>{tag}</span>
+          ))}
+        </div>
+      </div>
     </div>
   </section>
 

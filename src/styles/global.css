@@ -408,6 +408,49 @@ img { display: block; max-width: 100%; }
   border-radius: 4px;
 }
 
+/* ─── About section ──────────────────────────────────────── */
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 60px;
+  align-items: start;
+}
+.about-left h2 {
+  font: 400 clamp(32px, 4vw, 52px) / 1.0 var(--serif);
+  letter-spacing: -.04em;
+  margin: 12px 0 14px;
+}
+.about-role {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.55;
+  margin-bottom: 24px;
+}
+.about-linkedin {
+  font-size: 12px;
+  padding: 10px 18px;
+}
+.about-right p {
+  font-size: 16px;
+  color: var(--ink-soft);
+  line-height: 1.7;
+  margin-bottom: 20px;
+}
+.about-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 28px;
+}
+.about-tags span {
+  background: var(--blue-light);
+  color: var(--blue);
+  border-radius: 100px;
+  padding: 4px 12px;
+  font: 500 11px var(--mono);
+  letter-spacing: .05em;
+}
+
 /* ─── Footer ─────────────────────────────────────────────── */
 .site-footer {
   border-top: 1px solid var(--line);
@@ -429,6 +472,7 @@ img { display: block; max-width: 100%; }
 @media (max-width: 900px) {
   .card-grid.cols-3 { grid-template-columns: repeat(2, 1fr); }
   .featured-card { grid-template-columns: 1fr; }
+  .about-grid { grid-template-columns: 1fr; gap: 32px; }
 }
 @media (max-width: 640px) {
   .site-nav { display: none; }

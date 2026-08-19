@@ -1,7 +1,7 @@
 ---
 import '../styles/global.css';
 import { profile } from '../data';
-const { title = 'Signal Notes', description = 'Candid field notes from the world of AI.' } = Astro.props;
+const { title = 'AIFieldNotes by Akshit Pratiush', description = 'Candid field notes from the frontlines of AI, cloud infrastructure, and enterprise AI delivery.' } = Astro.props;
 const path = Astro.url.pathname;
 ---
 <!doctype html>
@@ -14,15 +14,16 @@ const path = Astro.url.pathname;
   </head>
   <body>
     <header class="site-header">
-      <a class="brand" href="/" aria-label="Signal Notes home">
-        <span class="brand-mark">∿</span>
-        SIGNAL NOTES
+      <a class="brand" href="/" aria-label="AIFieldNotes home">
+        <span class="brand-mark">◈</span>
+        AIFIELD<em style="font-style:normal;color:var(--blue)">NOTES</em>
       </a>
       <nav class="site-nav" aria-label="Main navigation">
         <a href="/articles" class={path.startsWith('/articles') ? 'active' : ''}>Read</a>
         <a href="/videos" class={path.startsWith('/videos') ? 'active' : ''}>Watch</a>
         <a href="/builds" class={path.startsWith('/builds') ? 'active' : ''}>Builds</a>
-        <a href="/#start-here" class={path === '/' ? '' : ''}>Start here</a>
+        <a href="/#about">About</a>
+        <a href="/#start-here">Start here</a>
       </nav>
       <a class="nav-cta" href={profile.channelUrl} target="_blank" rel="noreferrer">YouTube ↗</a>
     </header>
@@ -31,13 +32,15 @@ const path = Astro.url.pathname;
 
     <footer class="site-footer">
       <div class="footer-left">
-        <span class="brand"><span class="brand-mark">∿</span> SIGNAL NOTES</span>
-        <p>Making sense of AI, one useful idea at a time.</p>
+        <span class="brand"><span class="brand-mark">◈</span> AIFIELD<em style="font-style:normal;color:var(--blue)">NOTES</em></span>
+        <p>Field notes from the frontlines of AI, cloud infrastructure, and enterprise delivery.</p>
       </div>
       <div class="footer-links">
         <a href="/articles">Read</a>
         <a href="/videos">Watch</a>
         <a href="/builds">Builds</a>
+        <a href="/#about">About</a>
+        <a href={profile.linkedIn} target="_blank" rel="noreferrer">LinkedIn ↗</a>
         <a href={`mailto:${profile.email}`}>Say hello ↗</a>
       </div>
     </footer>
