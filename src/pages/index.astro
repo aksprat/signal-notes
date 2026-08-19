@@ -4,50 +4,123 @@ import ContentCard from '../components/ContentCard.astro';
 import { videos, builds, paths, profile } from '../data';
 import { getCollection } from 'astro:content';
 const learningArticles = (await getCollection('articles')).map(entry => ({ ...entry.data, slug: entry.id }));
+const featured = learningArticles.find(a => a.featured) || learningArticles[0];
+const latestTwo = learningArticles.filter(a => a.slug !== featured.slug).slice(0, 2);
 ---
 <BaseLayout>
+
+  <!-- ── Hero ─────────────────────────────────────────── -->
   <section class="hero">
-    <p class="eyebrow"><span class="pulse"></span> An open AI field journal</p>
-    <h1>Less noise.<br /><em>More signal.</em></h1>
-    <div class="hero-bottom">
-      <p>Notes, experiments, and clear explanations for anyone finding their footing in the world of AI.</p>
-      <a class="button" href="#start-here">Find your starting point <span>↓</span></a>
-    </div>
-    <div class="signal-line" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
-  </section>
-
-  <section class="split-section featured">
-    <div class="section-label">Selected signal <span>01</span></div>
-    <div><p class="kicker">A place to begin</p><ContentCard item={learningArticles.find(article => article.featured) || learningArticles[0]} /></div>
-  </section>
-
-  <section class="constellation-section">
-    <div class="section-intro"><p class="eyebrow">Explore by curiosity</p><h2>Follow the threads,<br />not the trends.</h2><p>Every note connects to a bigger question. Start wherever your curiosity is loudest.</p></div>
-    <div class="constellation" aria-label="AI topic map">
-      <span class="node main">AI</span><span class="node n1">Agents</span><span class="node n2">LLMs</span><span class="node n3">RAG</span><span class="node n4">Tools</span><span class="node n5">Learning</span><span class="node n6">Ideas</span>
-      <svg viewBox="0 0 620 380" aria-hidden="true"><path d="M310 185 L115 88 M310 185 L485 85 M310 185 L120 285 M310 185 L500 275 M310 185 L350 45 M310 185 L395 330" /></svg>
+    <div class="hero-inner">
+      <p class="eyebrow"><span class="pulse"></span>An open AI field journal</p>
+      <h1>Less noise.<br /><em>More signal.</em></h1>
+      <div class="hero-row">
+        <p>Notes, experiments, and clear explanations for anyone finding their footing in the world of AI.</p>
+        <a class="btn" href="#start-here">Find your starting point <span class="arrow">↓</span></a>
+      </div>
     </div>
   </section>
 
-  <section class="latest-section">
-    <div class="section-heading"><div><p class="eyebrow">Fresh from the notebook</p><h2>Latest notes</h2></div><a href="/articles">All articles →</a></div>
-    <div class="card-grid">{learningArticles.slice(1, 3).map(item => <ContentCard item={item} />)}</div>
+  <!-- ── Featured article ──────────────────────────────── -->
+  <section class="section">
+    <div class="section-header">
+      <div>
+        <p class="eyebrow blue">Featured</p>
+        <h2>Start with this one.</h2>
+      </div>
+      <a class="see-all" href="/articles">All articles →</a>
+    </div>
+    <div class="featured-card">
+      <div>
+        <p class="eyebrow" style="margin-bottom:14px">{featured.topics.join(' · ')}</p>
+        <h2><a href={`/articles/${featured.slug}`}>{featured.title}</a></h2>
+        <p>{featured.summary}</p>
+        <div class="tags">{featured.topics.map((t: string) => <span>{t}</span>)}</div>
+      </div>
+      <div class="featured-right">
+        <p style="color:var(--muted);font:11px var(--mono);text-transform:uppercase;letter-spacing:.1em">Why read this?</p>
+        <p style="font-size:15px;color:var(--ink-soft)">A solid foundation for understanding what AI systems actually do — and what they can't.</p>
+        <a class="btn" href={`/articles/${featured.slug}`} style="align-self:flex-start">Read article →</a>
+      </div>
+    </div>
   </section>
 
-  <section class="watch-section">
-    <div><p class="eyebrow">Watch & learn</p><h2>Ideas that<br />move.</h2><p>For the visual learners, the curious clickers, and the people who want to see the work in motion.</p><a class="text-link" href="/videos">Visit the video library →</a></div>
-    <div class="video-spotlight"><span class="play">▶</span><p>{videos[0].topics[0]}</p><h3>{videos[0].title}</h3><a href={videos[0].url} target="_blank" rel="noreferrer">Watch on YouTube ↗</a></div>
+  <!-- ── Latest notes ──────────────────────────────────── -->
+  <section class="section alt">
+    <div class="section-header">
+      <div>
+        <p class="eyebrow">Fresh from the notebook</p>
+        <h2>Latest notes</h2>
+      </div>
+      <a class="see-all" href="/articles">All articles →</a>
+    </div>
+    <div class="card-grid cols-2">
+      {latestTwo.map(item => <ContentCard item={item} />)}
+    </div>
   </section>
 
-  <section class="latest-section builds-preview">
-    <div class="section-heading"><div><p class="eyebrow">Things I’m trying</p><h2>In the lab</h2></div><a href="/builds">All builds →</a></div>
-    <div class="card-grid">{builds.map(item => <ContentCard item={item} kind="builds" />)}</div>
+  <!-- ── Videos ────────────────────────────────────────── -->
+  <section class="section">
+    <div class="section-header">
+      <div>
+        <p class="eyebrow">Watch &amp; learn</p>
+        <h2>Ideas that move.</h2>
+      </div>
+      <a class="see-all" href="/videos">All videos →</a>
+    </div>
+    <div class="video-grid">
+      {videos.slice(0, 3).map(v => (
+        <div class="video-card">
+          <span class="play-btn">▶</span>
+          <div class="card-meta"><span>{v.topics[0]}</span></div>
+          <h3>{v.title}</h3>
+          <a href={v.url} target="_blank" rel="noreferrer">Watch on YouTube ↗</a>
+        </div>
+      ))}
+    </div>
   </section>
 
-  <section class="paths" id="start-here">
-    <div class="section-intro"><p class="eyebrow">New around here?</p><h2>Start where you are.</h2></div>
-    <div class="path-list">{paths.map(([number, title, copy, tag]) => <a href="/articles"><span>{number}</span><div><h3>{title}</h3><p>{copy}</p></div><b>{tag} ↗</b></a>)}</div>
+  <!-- ── Builds ─────────────────────────────────────────── -->
+  <section class="section alt">
+    <div class="section-header">
+      <div>
+        <p class="eyebrow">Things I'm trying</p>
+        <h2>In the lab</h2>
+      </div>
+      <a class="see-all" href="/builds">All builds →</a>
+    </div>
+    <div class="card-grid cols-2">
+      {builds.map(item => <ContentCard item={item} kind="builds" />)}
+    </div>
   </section>
 
-  <section class="now-section"><p class="eyebrow">Now</p><p class="now-copy">{profile.now}</p></section>
+  <!-- ── Start here ────────────────────────────────────── -->
+  <section class="section" id="start-here">
+    <div class="section-header">
+      <div>
+        <p class="eyebrow">New around here?</p>
+        <h2>Start where you are.</h2>
+      </div>
+    </div>
+    <div class="path-list">
+      {paths.map(([number, title, copy, tag]) => (
+        <a class="path-item" href="/articles">
+          <span class="path-num">{number}</span>
+          <div>
+            <h3>{title}</h3>
+            <p>{copy}</p>
+          </div>
+          <span class="path-tag">{tag} ↗</span>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <!-- ── Now ───────────────────────────────────────────── -->
+  <div class="now-band">
+    <p class="eyebrow label"><span class="pulse"></span>Now</p>
+    <p class="now-copy">{profile.now}</p>
+  </div>
+
 </BaseLayout>
+
