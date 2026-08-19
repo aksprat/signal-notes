@@ -1,4 +1,18 @@
 ---
-import BaseLayout from '../../layouts/BaseLayout.astro'; import ContentCard from '../../components/ContentCard.astro'; import { builds } from '../../data';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ContentCard from '../../components/ContentCard.astro';
+import { builds } from '../../data';
 ---
-<BaseLayout title="Builds — Signal Notes"><section class="listing-hero"><p class="eyebrow">Builds</p><h1>Work in<br /><em>the open.</em></h1><p>Experiments, prototypes, and practical projects—complete or still becoming.</p></section><section class="latest-section listing"><div class="card-grid">{builds.map(item => <ContentCard item={item} kind="builds" />)}</div></section></BaseLayout>
+<BaseLayout title="Builds — Signal Notes">
+  <section class="listing-hero">
+    <p class="eyebrow">Builds</p>
+    <h1>Work in<br /><em>the open.</em></h1>
+    <p>Experiments, prototypes, and practical projects — complete or still becoming.</p>
+  </section>
+
+  <section class="section">
+    <div class="card-grid cols-2">
+      {builds.map(item => <ContentCard item={item} kind="builds" />)}
+    </div>
+  </section>
+</BaseLayout>

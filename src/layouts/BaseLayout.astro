@@ -2,31 +2,44 @@
 import '../styles/global.css';
 import { profile } from '../data';
 const { title = 'Signal Notes', description = 'Candid field notes from the world of AI.' } = Astro.props;
+const path = Astro.url.pathname;
 ---
 <!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
     <title>{title}</title>
   </head>
   <body>
     <header class="site-header">
-      <a class="brand" href="/" aria-label="Signal Notes home"><span class="brand-mark">∿</span> SIGNAL NOTES</a>
-      <nav aria-label="Main navigation">
+      <a class="brand" href="/" aria-label="Signal Notes home">
+        <span class="brand-mark">∿</span>
+        SIGNAL NOTES
+      </a>
+      <nav class="site-nav" aria-label="Main navigation">
+        <a href="/articles" class={path.startsWith('/articles') ? 'active' : ''}>Read</a>
+        <a href="/videos" class={path.startsWith('/videos') ? 'active' : ''}>Watch</a>
+        <a href="/builds" class={path.startsWith('/builds') ? 'active' : ''}>Builds</a>
+        <a href="/#start-here" class={path === '/' ? '' : ''}>Start here</a>
+      </nav>
+      <a class="nav-cta" href={profile.channelUrl} target="_blank" rel="noreferrer">YouTube ↗</a>
+    </header>
+
+    <main><slot /></main>
+
+    <footer class="site-footer">
+      <div class="footer-left">
+        <span class="brand"><span class="brand-mark">∿</span> SIGNAL NOTES</span>
+        <p>Making sense of AI, one useful idea at a time.</p>
+      </div>
+      <div class="footer-links">
         <a href="/articles">Read</a>
         <a href="/videos">Watch</a>
         <a href="/builds">Builds</a>
-        <a href="/#start-here">Start here</a>
-      </nav>
-      <a class="header-link" href={profile.channelUrl} target="_blank" rel="noreferrer">YouTube ↗</a>
-    </header>
-    <main><slot /></main>
-    <footer>
-      <span class="brand"><span class="brand-mark">∿</span> SIGNAL NOTES</span>
-      <p>Making sense of AI, one useful idea at a time.</p>
-      <a href={`mailto:${profile.email}`}>Say hello ↗</a>
+        <a href={`mailto:${profile.email}`}>Say hello ↗</a>
+      </div>
     </footer>
   </body>
 </html>

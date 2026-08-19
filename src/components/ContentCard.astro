@@ -5,9 +5,20 @@ const href = item.url || `/${kind === 'article' ? 'articles' : kind}/${item.slug
 const external = Boolean(item.url);
 ---
 <article class="content-card">
-  {item.thumbnail && <a class="thumbnail" href={href} target={external ? '_blank' : undefined} rel={external ? 'noreferrer' : undefined}><img src={item.thumbnail} alt="" loading="lazy" /></a>}
-  <div class="card-meta"><span>{item.date}</span><span>{item.readTime || item.status || kind}</span></div>
-  <h3><a href={href} target={external ? '_blank' : undefined} rel={external ? 'noreferrer' : undefined}>{item.title}{external && ' ↗'}</a></h3>
+  {item.thumbnail && (
+    <a class="thumbnail" href={href} target={external ? '_blank' : undefined} rel={external ? 'noreferrer' : undefined}>
+      <img src={item.thumbnail} alt="" loading="lazy" />
+    </a>
+  )}
+  <div class="card-meta">
+    <span>{item.date}</span>
+    <span>{item.readTime || item.status || kind}</span>
+  </div>
+  <h3>
+    <a href={href} target={external ? '_blank' : undefined} rel={external ? 'noreferrer' : undefined}>
+      {item.title}{external && ' ↗'}
+    </a>
+  </h3>
   <p>{item.summary}</p>
   <div class="tags">{item.topics.map(topic => <span>{topic}</span>)}</div>
 </article>
