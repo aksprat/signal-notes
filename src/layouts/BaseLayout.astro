@@ -1,8 +1,10 @@
 ---
 import '../styles/global.css';
 import { profile } from '../data';
-const { title = 'AIFieldNotes by Akshit Pratiush', description = 'Candid field notes from the frontlines of AI, cloud infrastructure, and enterprise AI delivery.' } = Astro.props;
+const { title = 'AIFieldNotes — Less hype. More understanding.', description = 'Practical field notes on LLMs, AI infrastructure, and building things that work. By Akshit Pratiush.' } = Astro.props;
 const path = Astro.url.pathname;
+const navigation = [['/', 'Home'], ['/articles', 'Articles'], ['/videos', 'Watch'], ['/builds', 'Builds'], ['/#about', 'About']];
+const canonical = new URL(path, Astro.site ?? Astro.url.origin);
 ---
 <!doctype html>
 <html lang="en">
@@ -10,39 +12,51 @@ const path = Astro.url.pathname;
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
+    <meta name="theme-color" content="#f8f7f3" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="canonical" href={canonical} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:type" content={path.startsWith('/articles/') ? 'article' : 'website'} />
     <title>{title}</title>
+    <noscript><style is:inline>@media (max-width: 560px) { body .header-inner { height: auto; flex-wrap: wrap; padding-block: 14px; gap: 8px; } body .menu-toggle { display: none; } body .site-nav { position: static; display: flex; flex-wrap: wrap; gap: 16px; padding: 0; box-shadow: none; border: 0; width: 100%; } body .site-nav a { padding: 7px 0; } body .site-nav a[aria-current]::after { display: none; } }</style></noscript>
   </head>
   <body>
+    <a class="skip-link" href="#main-content">Skip to content</a>
     <header class="site-header">
-      <a class="brand" href="/" aria-label="AIFieldNotes home">
-        <span class="brand-mark">◈</span>
-        AIFIELD<em style="font-style:normal;color:var(--blue)">NOTES</em>
-      </a>
-      <nav class="site-nav" aria-label="Main navigation">
-        <a href="/articles" class={path.startsWith('/articles') ? 'active' : ''}>Read</a>
-        <a href="/videos" class={path.startsWith('/videos') ? 'active' : ''}>Watch</a>
-        <a href="/builds" class={path.startsWith('/builds') ? 'active' : ''}>Builds</a>
-        <a href="/#about">About</a>
-        <a href="/#start-here">Start here</a>
-      </nav>
-      <a class="nav-cta" href={profile.channelUrl} target="_blank" rel="noreferrer">YouTube ↗</a>
+      <div class="header-inner">
+        <a class="brand" href="/" aria-label="AIFieldNotes home"><span class="brand-mark" aria-hidden="true">✳</span><span>AI<span class="brand-light">FieldNotes</span><span class="brand-dot">.</span></span></a>
+        <button class="menu-toggle" aria-expanded="false" aria-controls="main-navigation">Menu <span aria-hidden="true">☰</span></button>
+        <nav id="main-navigation" class="site-nav" aria-label="Main navigation">
+          {navigation.map(([href, label]) => <a href={href} aria-current={(href === '/' ? path === '/' : !href.includes('#') && path.startsWith(href)) ? 'page' : undefined}>{label}</a>)}
+        </nav>
+        <a class="nav-cta" href="/#start-here">Start exploring <span aria-hidden="true">↗</span></a>
+      </div>
     </header>
-
-    <main><slot /></main>
-
-    <footer class="site-footer">
-      <div class="footer-left">
-        <span class="brand"><span class="brand-mark">◈</span> AIFIELD<em style="font-style:normal;color:var(--blue)">NOTES</em></span>
-        <p>Field notes from the frontlines of AI, cloud infrastructure, and enterprise delivery.</p>
-      </div>
-      <div class="footer-links">
-        <a href="/articles">Read</a>
-        <a href="/videos">Watch</a>
-        <a href="/builds">Builds</a>
-        <a href="/#about">About</a>
-        <a href={profile.linkedIn} target="_blank" rel="noreferrer">LinkedIn ↗</a>
-        <a href={`mailto:${profile.email}`}>Say hello ↗</a>
-      </div>
+    <main id="main-content"><slot /></main>
+    <footer class="site-footer wrap">
+      <div><a class="brand" href="/"><span class="brand-mark" aria-hidden="true">✳</span><span>AI<span class="brand-light">FieldNotes</span>.</span></a><p>Making sense of AI. One field note at a time.</p></div>
+      <div class="footer-links"><a href="/articles">Articles</a><a href={profile.channelUrl} target="_blank" rel="noreferrer">YouTube ↗</a><a href={profile.linkedIn} target="_blank" rel="noreferrer">LinkedIn ↗</a><a href="https://github.com/aksprat/signal-notes" target="_blank" rel="noreferrer">GitHub ↗</a></div>
+      <div class="footer-bottom"><span>© {new Date().getFullYear()} {profile.name}</span><span>Built with curiosity. Shared in the open.</span><a href="#main-content">Back to top ↑</a></div>
     </footer>
+    <script>
+      const toggle = document.querySelector<HTMLButtonElement>('.menu-toggle');
+      const navigation = document.querySelector<HTMLElement>('#main-navigation');
+      function closeMenu() { toggle?.setAttribute('aria-expanded', 'false'); navigation?.classList.remove('is-open'); }
+      toggle?.addEventListener('click', () => {
+        const open = toggle.getAttribute('aria-expanded') !== 'true';
+        toggle.setAttribute('aria-expanded', String(open));
+        navigation?.classList.toggle('is-open', open);
+      });
+      navigation?.querySelectorAll('a').forEach(link => link.addEventListener('click', closeMenu));
+      document.addEventListener('keydown', event => { if (event.key === 'Escape' && toggle?.getAttribute('aria-expanded') === 'true') { closeMenu(); toggle.focus(); } });
+      if ('IntersectionObserver' in window && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        const observer = new IntersectionObserver(entries => entries.forEach(entry => {
+          if (entry.isIntersecting) { entry.target.classList.add('revealed'); observer.unobserve(entry.target); }
+        }), { threshold: 0.08 });
+        document.querySelectorAll('[data-reveal]').forEach(element => { element.classList.add('will-reveal'); observer.observe(element); });
+      }
+    </script>
   </body>
 </html>

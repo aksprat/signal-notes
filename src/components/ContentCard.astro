@@ -1,24 +1,18 @@
 ---
 import type { ContentItem } from '../data';
-const { item, kind = 'article' } = Astro.props as { item: ContentItem; kind?: string };
+import { categoryFor, toneFor } from '../lib/content';
+import NoteArt from './NoteArt.astro';
+const { item, kind = 'article', artwork = true } = Astro.props as { item: ContentItem; kind?: string; artwork?: boolean };
 const href = item.url || `/${kind === 'article' ? 'articles' : kind}/${item.slug}`;
 const external = Boolean(item.url);
+const category = categoryFor(item);
 ---
-<article class="content-card">
-  {item.thumbnail && (
-    <a class="thumbnail" href={href} target={external ? '_blank' : undefined} rel={external ? 'noreferrer' : undefined}>
-      <img src={item.thumbnail} alt="" loading="lazy" />
-    </a>
-  )}
-  <div class="card-meta">
-    <span>{item.date}</span>
-    <span>{item.readTime || item.status || kind}</span>
+<article class:list={['content-card', `tone-${toneFor(item)}`]} data-category={category} data-search={`${item.title} ${item.summary} ${item.topics.join(' ')} ${item.date}`.toLowerCase()}>
+  {artwork && (item.thumbnail ? <div class="thumbnail"><img src={item.thumbnail} alt="" loading="lazy" width="480" height="270" /><span class="play-btn" aria-hidden="true">▶</span></div> : <NoteArt tone={toneFor(item)} variant={category === 'Foundations' ? 'tokens' : category === 'RAG & Agents' ? 'network' : 'circuit'} />)}
+  <div class="card-content">
+    <div class="card-meta"><span class="category-label">{kind === 'builds' ? item.status : item.thumbnail ? 'Video walkthrough' : category}</span><span>{item.readTime || (item.thumbnail ? 'YouTube' : item.status || 'Field guide')}</span></div>
+    <h3><a href={href} target={external ? '_blank' : undefined} rel={external ? 'noreferrer' : undefined}>{item.title}<span class="sr-only">{external ? ' (opens in a new tab)' : ''}</span></a></h3>
+    <p>{item.summary}</p>
+    <div class="card-bottom"><span>{item.topics.slice(0, 2).join(' / ')}</span><span class="card-arrow" aria-hidden="true">↗</span></div>
   </div>
-  <h3>
-    <a href={href} target={external ? '_blank' : undefined} rel={external ? 'noreferrer' : undefined}>
-      {item.title}{external && ' ↗'}
-    </a>
-  </h3>
-  <p>{item.summary}</p>
-  <div class="tags">{item.topics.map(topic => <span>{topic}</span>)}</div>
 </article>

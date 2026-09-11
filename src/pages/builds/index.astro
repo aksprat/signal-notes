@@ -3,14 +3,16 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import ContentCard from '../../components/ContentCard.astro';
 import { builds } from '../../data';
 ---
-<BaseLayout title="Builds — Signal Notes">
-  <section class="listing-hero">
+<BaseLayout title="The workbench — AIFieldNotes">
+  <section class="listing-hero wrap">
     <p class="eyebrow">Builds</p>
     <h1>Work in<br /><em>the open.</em></h1>
     <p>Experiments, prototypes, and practical projects — complete or still becoming.</p>
   </section>
 
-  <section class="section">
+  <section class="section wrap">
+    <h2 class="sr-only">On the workbench</h2>
+    <p class="workbench-note">On the workbench: early experiments, not finished products. Detailed build logs will follow as the projects take shape.</p>
     <div class="card-grid cols-2">
       {builds.map(item => <ContentCard item={item} kind="builds" />)}
     </div>

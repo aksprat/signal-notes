@@ -1,148 +1,61 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ContentCard from '../components/ContentCard.astro';
-import { videos, builds, paths, profile } from '../data';
+import ArticleLibrary from '../components/ArticleLibrary.astro';
+import NoteArt from '../components/NoteArt.astro';
+import { articles, videos, profile } from '../data';
 import { getCollection } from 'astro:content';
-const learningArticles = (await getCollection('articles')).map(entry => ({ ...entry.data, slug: entry.id }));
-const featured = learningArticles.find(a => a.featured) || learningArticles[0];
-const latestTwo = learningArticles.filter(a => a.slug !== featured.slug).slice(0, 2);
+const notes = (await getCollection('articles')).map(entry => ({ ...entry.data, slug: entry.id }));
+const featured = notes.find(note => note.featured) || notes[0];
+const curatedOrder = ['tokens', 'rag', 'where-llm-latency-comes-from', 'context-windows', 'agent-safety-and-guardrails', 'tensor-parallelism'];
+const library = [...notes].sort((first, second) => (curatedOrder.includes(first.slug) ? curatedOrder.indexOf(first.slug) : 99) - (curatedOrder.includes(second.slug) ? curatedOrder.indexOf(second.slug) : 99));
+const paths = [
+  { number: '01', title: 'Understand the fundamentals', copy: 'Tokens, context, and the ideas behind the intelligence.', href: '/articles/tokens', label: 'Start with tokens', icon: '⌘', tone: 'orange' },
+  { number: '02', title: 'Go under the hood', copy: 'Inference, GPUs, and what makes an LLM actually fast.', href: '/articles/where-llm-latency-comes-from', label: 'Explore inference', icon: '↯', tone: 'violet' },
+  { number: '03', title: 'Connect theory to practice', copy: 'Retrieval, agents, and building AI that earns its keep.', href: '/articles/rag', label: 'Get into RAG', icon: '⌁', tone: 'green' },
+];
 ---
 <BaseLayout>
-
-  <!-- ── Hero ─────────────────────────────────────────── -->
-  <section class="hero">
-    <div class="hero-inner">
-      <p class="eyebrow"><span class="pulse"></span>AIFieldNotes · by Akshit Pratiush</p>
-      <h1>From the<br /><em>AI frontier.</em></h1>
-      <div class="hero-row">
-        <p>Candid field notes, experiments, and practical guides from the frontlines of AI infrastructure, LLMs, and enterprise AI delivery.</p>
-        <a class="btn" href="#start-here">Find your starting point <span class="arrow">↓</span></a>
-      </div>
+  <section class="hero wrap">
+    <div class="hero-copy">
+      <p class="eyebrow"><span class="live-dot"></span> FIELD NOTES, NOT HOT TAKES</p>
+      <h1>Less AI hype.<br />More <em>understanding.</em></h1>
+      <p class="hero-description">Exploring how AI actually works — from the first token to production. Practical ideas, honest experiments, and a little curiosity.</p>
+      <div class="hero-actions"><a class="btn" href="#explore">Explore the notes <span aria-hidden="true">↗</span></a><a class="subtle-link" href="#start-here">New here? Start here <span aria-hidden="true">→</span></a></div>
+      <div class="author-line"><span class="avatar">AP</span><span>By <strong>{profile.name}</strong><small>Engineer by trade. Curious by default.</small></span></div>
+    </div>
+    <div class="hero-visual" aria-hidden="true">
+      <span class="diagram-label">FIG. 01 — IDEAS INTO UNDERSTANDING</span>
+      <svg class="orbital-diagram" viewBox="0 0 460 430" fill="none">
+        <defs><radialGradient id="orb-glow"><stop stop-color="#f6b68d" stop-opacity=".5"/><stop offset="1" stop-color="#f8f7f3" stop-opacity="0"/></radialGradient><pattern id="diagram-dots" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r="1" fill="#c9c5bc"/></pattern></defs>
+        <rect width="460" height="430" fill="url(#diagram-dots)" opacity=".5"/><circle cx="230" cy="215" r="195" fill="url(#orb-glow)"/>
+        <g class="orbit-spin" stroke="#b9b3a6" stroke-width="1"><ellipse cx="230" cy="215" rx="176" ry="66" transform="rotate(-35 230 215)"/><ellipse cx="230" cy="215" rx="176" ry="66" transform="rotate(35 230 215)"/><ellipse cx="230" cy="215" rx="176" ry="66" transform="rotate(90 230 215)"/><circle cx="230" cy="215" r="134" stroke-dasharray="3 7" opacity=".45"/></g>
+        <path d="m127 113 103 102 107-89M114 299l116-84 113 89M230 215V61m0 154v152" stroke="#dc744d" stroke-dasharray="3 5" opacity=".5"/>
+        <circle cx="230" cy="215" r="58" fill="#f4e3d6" stroke="#e6c4ae"/><circle cx="230" cy="215" r="44" fill="#e66036"/>
+        <g stroke="#fff8ed" stroke-width="3"><path d="M230 188v54m-27-27h54m-46-19 38 38m-38 0 38-38"/></g>
+        <g fill="#f8f7f3" stroke="#b8b2a7"><circle cx="127" cy="113" r="10"/><circle cx="337" cy="126" r="7"/><circle cx="114" cy="299" r="7"/><circle cx="343" cy="304" r="10"/><circle cx="230" cy="61" r="6"/></g><circle class="art-pulse" cx="230" cy="367" r="7" fill="#e66036"/>
+      </svg>
+      <span class="floating-label label-model"><span>⌘</span> Language models</span><span class="floating-label label-infra"><span>↯</span> AI infrastructure</span><span class="floating-label label-build"><span>⌁</span> Real-world builds</span>
+      <span class="diagram-foot"><span class="live-dot"></span> ALWAYS LEARNING. ALWAYS CONNECTING.</span>
     </div>
   </section>
-
-  <!-- ── Featured article ──────────────────────────────── -->
-  <section class="section">
-    <div class="section-header">
-      <div>
-        <p class="eyebrow blue">Featured</p>
-        <h2>Start with this one.</h2>
-      </div>
-      <a class="see-all" href="/articles">All articles →</a>
-    </div>
-    <div class="featured-card">
-      <div>
-        <p class="eyebrow" style="margin-bottom:14px">{featured.topics.join(' · ')}</p>
-        <h2><a href={`/articles/${featured.slug}`}>{featured.title}</a></h2>
-        <p>{featured.summary}</p>
-        <div class="tags">{featured.topics.map((t: string) => <span>{t}</span>)}</div>
-      </div>
-      <div class="featured-right">
-        <p style="color:var(--muted);font:11px var(--mono);text-transform:uppercase;letter-spacing:.1em">Why read this?</p>
-        <p style="font-size:15px;color:var(--ink-soft)">A solid foundation for understanding what AI systems actually do — and what they can't.</p>
-        <a class="btn" href={`/articles/${featured.slug}`} style="align-self:flex-start">Read article →</a>
-      </div>
+  <div class="topic-strip"><div class="wrap"><span>FOLLOW THE CURIOSITY</span><a href="/articles?topic=Foundations">LLMs & foundations</a><span aria-hidden="true">✳</span><a href="/articles?topic=Inference">Inference & GPUs</a><span aria-hidden="true">✳</span><a href="/articles?topic=RAG+%26+Agents">RAG & agents</a><span aria-hidden="true">✳</span><a href="/articles?topic=Cloud+%26+Tools">Cloud & infrastructure</a></div></div>
+  <section class="section wrap" data-reveal>
+    <div class="section-header"><p class="eyebrow">THE EDITOR’S PICK</p><span class="small-note">A good place to get curious.</span></div>
+    <a class="featured-card" href={`/articles/${featured.slug}`}>
+      <div class="featured-art"><span class="feature-index">FIELD NOTE / 006</span><NoteArt variant="circuit" tone="dark" /><div class="cache-flow"><span>Read once.</span><span>Remember.</span><span>Generate faster. ↗</span></div></div>
+      <div class="featured-copy"><div class="card-meta"><span class="category-label">✳ Featured note</span><span>{featured.readTime}</span></div><h2>{featured.title}</h2><p>{featured.summary}</p><span class="text-link">Unpack the idea <span aria-hidden="true">↗</span></span></div>
+    </a>
+  </section>
+  <section class="section wrap explore-section" id="explore">
+    <div class="section-header"><div><p class="eyebrow">THE NOTEBOOK</p><h2>A little deeper. <em>A lot clearer.</em></h2><p class="section-description">Small notes on big ideas. Find the thread that interests you.</p></div><a class="text-link" href="/articles">All articles ↗</a></div>
+    <ArticleLibrary items={[...library, ...articles]} compact />
+  </section>
+  <section class="paths-section" id="start-here">
+    <div class="wrap section"><div class="section-header"><div><p class="eyebrow">CHOOSE YOUR OWN RABBIT HOLE</p><h2>Big field. <em>Easy starting points.</em></h2></div><p class="section-description">You don’t need to know everything.<br />Just pick a thread and pull.</p></div>
+      <div class="card-grid cols-3">{paths.map(path => <a class:list={['path-card', `tone-${path.tone}`]} href={path.href} data-reveal><div class="path-top"><span class="path-icon" aria-hidden="true">{path.icon}</span><span>{path.number} /</span></div><h3>{path.title}</h3><p>{path.copy}</p><span class="text-link">{path.label} ↗</span></a>)}</div>
     </div>
   </section>
-
-  <!-- ── Latest notes ──────────────────────────────────── -->
-  <section class="section alt">
-    <div class="section-header">
-      <div>
-        <p class="eyebrow">Fresh from the notebook</p>
-        <h2>Latest notes</h2>
-      </div>
-      <a class="see-all" href="/articles">All articles →</a>
-    </div>
-    <div class="card-grid cols-2">
-      {latestTwo.map(item => <ContentCard item={item} />)}
-    </div>
-  </section>
-
-  <!-- ── Videos ────────────────────────────────────────── -->
-  <section class="section">
-    <div class="section-header">
-      <div>
-        <p class="eyebrow">Watch &amp; learn</p>
-        <h2>Ideas that move.</h2>
-      </div>
-      <a class="see-all" href="/videos">All videos →</a>
-    </div>
-    <div class="video-grid">
-      {videos.slice(0, 3).map(v => (
-        <div class="video-card">
-          <span class="play-btn">▶</span>
-          <div class="card-meta"><span>{v.topics[0]}</span></div>
-          <h3>{v.title}</h3>
-          <a href={v.url} target="_blank" rel="noreferrer">Watch on YouTube ↗</a>
-        </div>
-      ))}
-    </div>
-  </section>
-
-  <!-- ── Builds ─────────────────────────────────────────── -->
-  <section class="section alt">
-    <div class="section-header">
-      <div>
-        <p class="eyebrow">Things I'm trying</p>
-        <h2>In the lab</h2>
-      </div>
-      <a class="see-all" href="/builds">All builds →</a>
-    </div>
-    <div class="card-grid cols-2">
-      {builds.map(item => <ContentCard item={item} kind="builds" />)}
-    </div>
-  </section>
-
-  <!-- ── Start here ────────────────────────────────────── -->
-  <section class="section" id="start-here">
-    <div class="section-header">
-      <div>
-        <p class="eyebrow">New around here?</p>
-        <h2>Start where you are.</h2>
-      </div>
-    </div>
-    <div class="path-list">
-      {paths.map(([number, title, copy, tag]) => (
-        <a class="path-item" href="/articles">
-          <span class="path-num">{number}</span>
-          <div>
-            <h3>{title}</h3>
-            <p>{copy}</p>
-          </div>
-          <span class="path-tag">{tag} ↗</span>
-        </a>
-      ))}
-    </div>
-  </section>
-
-  <!-- ── About ─────────────────────────────────────────── -->
-  <section class="section" id="about">
-    <div class="about-grid">
-      <div class="about-left">
-        <p class="eyebrow blue"><span class="pulse"></span>About me</p>
-        <h2>Akshit Pratiush</h2>
-        <p class="about-role">{profile.role}</p>
-        <a class="btn about-linkedin" href={profile.linkedIn} target="_blank" rel="noreferrer">
-          LinkedIn ↗
-        </a>
-      </div>
-      <div class="about-right">
-        {profile.bio.map((para: string) => <p>{para}</p>)}
-        <div class="about-tags">
-          {profile.skills.map((tag: string) => (
-            <span>{tag}</span>
-          ))}
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ── Now ───────────────────────────────────────────── -->
-  <div class="now-band">
-    <p class="eyebrow label"><span class="pulse"></span>Now</p>
-    <p class="now-copy">{profile.now}</p>
-  </div>
-
+  <section class="section wrap" data-reveal><div class="section-header"><div><p class="eyebrow">LESS READING. MORE SEEING.</p><h2>Some ideas <em>need a walkthrough.</em></h2></div><a class="text-link" href="/videos">All videos ↗</a></div><div class="card-grid cols-3">{videos.slice(0, 3).map(item => <ContentCard item={item} />)}</div></section>
+  <section class="about-section wrap" id="about" data-reveal><div class="about-intro"><p class="eyebrow">THE HUMAN BEHIND THE NOTES</p><h2>Hi, I’m Akshit.<br /><em>Still figuring things out.</em></h2><a class="btn btn-outline" href={profile.linkedIn} target="_blank" rel="noreferrer">Let’s connect ↗</a></div><div class="about-copy"><p>I’m a Forward Deployed Engineer working at the intersection of AI, cloud infrastructure, and real-world problems.</p><p>This is my open notebook: what I’m learning, what I’m building, and the explanations I wish I’d had. No crystal-ball predictions. Just ideas tested in the field.</p><div class="about-tags">{profile.skills.slice(0, 5).map(skill => <span>{skill}</span>)}</div><div class="now-note"><span class="live-dot"></span><span><strong>Currently</strong> {profile.now}</span></div></div></section>
 </BaseLayout>
-

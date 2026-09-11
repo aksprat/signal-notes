@@ -3,7 +3,6 @@ export type ContentItem = {
   readTime?: string; url?: string; status?: string; thumbnail?: string;
 };
 
-// This is the only file you need to edit to add articles, videos, and projects.
 export const profile = {
   name: 'Akshit Pratiush',
   role: 'Forward Deployed Engineer | AI & Cloud Infrastructure | LLMs, GenAI, GPU Inference & Storage | Enterprise AI Architecture & Technical Delivery',

@@ -1,0 +1,19 @@
+---
+const { variant = 'network', tone = 'orange' } = Astro.props;
+---
+<div class:list={['note-art', `tone-${tone}`, `art-${variant}`]} aria-hidden="true">
+  <svg viewBox="0 0 480 230" fill="none">
+    {variant === 'network' ? <>
+      <g class="network-lines" stroke="currentColor" stroke-width="1.2" opacity=".35"><path d="M110 60 235 35 370 70 240 115 110 60 120 175 240 115 355 180 370 70M235 35 240 115 235 205 120 175M110 60 355 180M120 175 370 70M355 180 235 205" /></g>
+      <g fill="currentColor"><circle cx="110" cy="60" r="7"/><circle cx="235" cy="35" r="5"/><circle cx="370" cy="70" r="7"/><circle cx="120" cy="175" r="5"/><circle cx="355" cy="180" r="6"/><circle cx="235" cy="205" r="4"/></g>
+      <circle class="art-pulse" cx="240" cy="115" r="34" stroke="currentColor" opacity=".25"/><circle cx="240" cy="115" r="22" fill="currentColor"/><path d="m230 115 7 7 13-15" stroke="var(--art-bg)" stroke-width="3"/>
+    </> : variant === 'tokens' ? <>
+      <g stroke="currentColor" opacity=".5"><rect x="62" y="68" width="83" height="48" rx="8"/><rect x="156" y="68" width="112" height="48" rx="8"/><rect x="279" y="68" width="137" height="48" rx="8"/><path d="M104 130v29h109m0-29v54m136-54v29H213"/><rect x="181" y="179" width="64" height="28" rx="6"/></g>
+      <g fill="currentColor" font-family="monospace" font-size="16" text-anchor="middle"><text x="104" y="98">Less</text><text x="212" y="98">hype.</text><text x="348" y="98">More AI.</text><text x="213" y="199" font-size="12">[0.42]</text></g>
+    </> : <>
+      <g stroke="currentColor" opacity=".45"><path d="M60 73h108v42h57m-165 44h108v-44M280 115h57V60h82m-139 55h57v55h82"/><rect x="225" y="85" width="55" height="60" rx="10"/><rect x="55" y="54" width="65" height="38" rx="6"/><rect x="55" y="140" width="65" height="38" rx="6"/><rect x="360" y="41" width="65" height="38" rx="6"/><rect x="360" y="151" width="65" height="38" rx="6"/></g>
+      <g fill="currentColor"><circle cx="168" cy="115" r="5"/><circle cx="337" cy="115" r="5"/><path d="m253 97-11 20h10l-2 17 14-23h-11z"/></g>
+    </>}
+  </svg>
+  <span class="art-caption">{variant === 'tokens' ? '01 / THE BUILDING BLOCKS' : variant === 'network' ? '02 / CONNECTING THE DOTS' : '03 / UNDER THE HOOD'}</span>
+</div>

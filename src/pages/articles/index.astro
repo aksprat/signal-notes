@@ -1,38 +1,11 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import ContentCard from '../../components/ContentCard.astro';
+import ArticleLibrary from '../../components/ArticleLibrary.astro';
 import { articles } from '../../data';
 import { getCollection } from 'astro:content';
-const learningArticles = (await getCollection('articles')).map(entry => ({ ...entry.data, slug: entry.id }));
+const notes = (await getCollection('articles')).map(entry => ({ ...entry.data, slug: entry.id }));
 ---
-<BaseLayout title="Articles — Signal Notes">
-  <section class="listing-hero">
-    <p class="eyebrow">Read</p>
-    <h1>Longer thoughts<br /><em>worth keeping.</em></h1>
-    <p>Clear explanations, learning notes, and opinions formed while doing the work.</p>
-  </section>
-
-  <section class="section">
-    <div class="section-header">
-      <div>
-        <p class="eyebrow blue">AI learning series</p>
-        <h2>Start with the essentials</h2>
-      </div>
-    </div>
-    <div class="card-grid cols-3">
-      {learningArticles.map(item => <ContentCard item={item} />)}
-    </div>
-  </section>
-
-  <section class="section alt">
-    <div class="section-header">
-      <div>
-        <p class="eyebrow">Published work</p>
-        <h2>From the field</h2>
-      </div>
-    </div>
-    <div class="card-grid cols-3">
-      {articles.map(item => <ContentCard item={item} />)}
-    </div>
-  </section>
+<BaseLayout title="The notebook — AIFieldNotes">
+  <section class="listing-hero wrap"><p class="eyebrow">THE NOTEBOOK / {notes.length + articles.length} ARTICLES & FIELD GUIDES</p><h1>Follow your <em>curiosity.</em></h1><p>Clear mental models, practical guides, and lessons from the field. Search for an idea, explore a topic, or find something unexpected.</p></section>
+  <section class="section wrap library-section"><ArticleLibrary items={[...notes, ...articles]} /></section>
 </BaseLayout>

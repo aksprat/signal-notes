@@ -1,0 +1,57 @@
+---
+import ContentCard from './ContentCard.astro';
+import { categories } from '../lib/content';
+import type { ContentItem } from '../data';
+const { items, compact = false } = Astro.props as { items: ContentItem[]; compact?: boolean };
+---
+<article-library data-limit={compact ? 6 : items.length}>
+  {!compact && <h2 class="sr-only">Browse the field notes</h2>}
+  <div class="library-controls" hidden>
+    <div class="filter-tabs" role="group" aria-label="Filter by topic">{categories.map((category, index) => <button type="button" data-filter={category} aria-pressed={index === 0 ? 'true' : 'false'}>{category}</button>)}</div>
+    <label class="search-box"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></svg><span class="sr-only">Search articles</span><input type="search" placeholder="Find a field note…" aria-label="Search articles" /></label>
+  </div>
+  <div class="library-status" hidden><span role="status" aria-live="polite" data-results></span><button type="button" class="text-link" data-reset hidden>Clear filters ×</button></div>
+  <div class="card-grid cols-3">{items.map(item => <ContentCard item={item} />)}</div>
+  <div class="empty-state" hidden><span aria-hidden="true">⌕</span><h3>No notes found. Keep exploring.</h3><p>Try another keyword or choose a different topic.</p><button type="button" class="btn" data-reset>Show all notes →</button></div>
+  {compact && <div class="library-more"><button type="button" class="btn btn-outline" data-more hidden>Show more notes ↓</button><a class="text-link" href="/articles">Visit the full library ↗</a></div>}
+</article-library>
+<script>
+  class ArticleLibrary extends HTMLElement {
+    connectedCallback() {
+      const cards = Array.from(this.querySelectorAll<HTMLElement>('.content-card'));
+      const search = this.querySelector<HTMLInputElement>('input')!;
+      const buttons = Array.from(this.querySelectorAll<HTMLButtonElement>('[data-filter]'));
+      const more = this.querySelector<HTMLButtonElement>('[data-more]');
+      const initialLimit = Number(this.dataset.limit);
+      let limit = initialLimit;
+      let selected = 'All notes';
+      const params = new URLSearchParams(window.location.search);
+      const topic = params.get('topic');
+      if (buttons.some(button => button.dataset.filter === topic)) selected = topic!;
+      search.value = params.get('q') || '';
+      this.querySelectorAll<HTMLElement>('.library-controls, .library-status').forEach(element => element.hidden = false);
+      const update = (syncUrl = true) => {
+        const query = search.value.trim().toLowerCase();
+        const matches = cards.filter(card => (selected === 'All notes' || card.dataset.category === selected) && query.split(/\s+/).every(term => card.dataset.search?.includes(term)));
+        cards.forEach(card => card.hidden = !matches.includes(card) || matches.indexOf(card) >= limit);
+        buttons.forEach(button => button.setAttribute('aria-pressed', String(button.dataset.filter === selected)));
+        this.querySelector<HTMLElement>('[data-results]')!.textContent = `${Math.min(limit, matches.length)} of ${matches.length} notes${selected === 'All notes' ? ' · A little less noise, a little more signal.' : ` in ${selected}`}`;
+        this.querySelector<HTMLElement>('.empty-state')!.hidden = matches.length !== 0;
+        this.querySelector<HTMLElement>('.library-status [data-reset]')!.hidden = !query && selected === 'All notes';
+        if (more) more.hidden = matches.length <= limit;
+        if (syncUrl) {
+          const url = new URL(window.location.href);
+          query ? url.searchParams.set('q', search.value.trim()) : url.searchParams.delete('q');
+          selected === 'All notes' ? url.searchParams.delete('topic') : url.searchParams.set('topic', selected);
+          window.history.replaceState(null, '', url);
+        }
+      };
+      buttons.forEach(button => button.addEventListener('click', () => { selected = button.dataset.filter!; limit = initialLimit; update(); }));
+      search.addEventListener('input', () => { limit = initialLimit; update(); });
+      this.querySelectorAll('[data-reset]').forEach(button => button.addEventListener('click', () => { selected = 'All notes'; search.value = ''; limit = initialLimit; update(); search.focus(); }));
+      more?.addEventListener('click', () => { const next = cards.filter(card => card.hidden && (selected === 'All notes' || card.dataset.category === selected) && search.value.trim().toLowerCase().split(/\s+/).every(term => card.dataset.search?.includes(term)))[0]; limit += initialLimit; update(); next?.querySelector('a')?.focus(); });
+      update(false);
+    }
+  }
+  customElements.define('article-library', ArticleLibrary);
+</script>
