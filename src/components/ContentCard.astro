@@ -7,7 +7,7 @@ const href = item.url || `/${kind === 'article' ? 'articles' : kind}/${item.slug
 const external = Boolean(item.url);
 const category = categoryFor(item);
 ---
-<article class:list={['content-card', `tone-${toneFor(item)}`]} data-category={category} data-search={`${item.title} ${item.summary} ${item.topics.join(' ')} ${item.date}`.toLowerCase()}>
+<article class:list={['content-card', `tone-${toneFor(item)}`]} data-category={category} data-search={`${item.title} ${item.summary} ${item.topics.join(' ')} ${item.date} ${item.searchText || ''}`.toLowerCase()}>
   {artwork && (item.thumbnail ? <div class="thumbnail"><img src={item.thumbnail} alt="" loading="lazy" width="480" height="270" /><span class="play-btn" aria-hidden="true">▶</span></div> : <NoteArt tone={toneFor(item)} variant={category === 'Foundations' ? 'tokens' : category === 'RAG & Agents' ? 'network' : 'circuit'} />)}
   <div class="card-content">
     <div class="card-meta"><span class="category-label">{kind === 'builds' ? item.status : item.thumbnail ? 'Video walkthrough' : category}</span><span>{item.readTime || (item.thumbnail ? 'YouTube' : item.status || 'Field guide')}</span></div>

@@ -103,16 +103,21 @@ h2 { font-size: clamp(28px, 3vw, 38px); font-weight: 500; letter-spacing: -1.2px
 .text-link:hover { color: var(--accent); }
 .explore-section { padding-top: 31px; padding-bottom: 67px; }
 article-library { display: block; }
-.library-controls { display: flex; align-items: center; justify-content: space-between; gap: 15px; border-bottom: 1px solid var(--line); padding-block: 0 20px; }
+.library-controls { display: flex; flex-direction: column; align-items: stretch; gap: 20px; border-bottom: 1px solid var(--line); padding-block: 0 20px; }
+.library-search { width: 100%; }
+.search-label { display: block; margin-bottom: 9px; font-size: 16px; font-weight: 650; }
+.search-help { margin-top: 9px; font-size: 12px; color: var(--muted); }
 .filter-tabs { display: flex; gap: 6px; flex-wrap: wrap; }
 .filter-tabs button { white-space: nowrap; padding: 8px 12px; border-radius: 5px; font-size: 11px; transition: color .2s, background .2s; }
 .filter-tabs button:hover { background: #eaece3; }
 .filter-tabs button[aria-pressed='true'] { background: var(--ink); color: white; }
-.search-box { display: flex; align-items: center; gap: 9px; border: 1px solid var(--line); border-radius: 5px; padding: 9px 12px; background: #fcfbf8; color: var(--muted); flex: 0 1 240px; min-width: 170px; }
+.search-box { display: flex; align-items: center; gap: 12px; border: 1px solid var(--line); border-radius: 8px; padding: 15px 18px; background: #fcfbf8; color: var(--muted); }
+.search-box svg { flex-shrink: 0; }
 .search-box:focus-within { outline: 2px solid var(--accent); outline-offset: 2px; }
-.search-box input { width: 100%; min-width: 0; outline: 0; border: 0; background: transparent; font-size: 11px; color: var(--ink); }
+.search-box input { width: 100%; min-width: 0; outline: 0; border: 0; background: transparent; font-size: 16px; color: var(--ink); scroll-margin-top: 30px; }
 .search-box input::placeholder { color: var(--muted); }
 .library-status { min-height: 50px; padding-block: 14px; display: flex; justify-content: space-between; gap: 15px; color: var(--muted); font: 9px/1.5 var(--mono); }
+.library-status [data-results] { min-width: 0; overflow-wrap: anywhere; }
 .card-grid { display: grid; gap: 23px; }
 .cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }

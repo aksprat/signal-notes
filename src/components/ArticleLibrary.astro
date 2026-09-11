@@ -7,9 +7,14 @@ const { items, compact = false } = Astro.props as { items: ContentItem[]; compac
 <article-library data-limit={compact ? 6 : items.length}>
   {!compact && <h2 class="sr-only">Browse the field notes</h2>}
   <div class="library-controls" hidden>
+    <div class="library-search" role="search" aria-label="Article search">
+      <label class="search-label" for="article-search">Search articles</label>
+      <div class="search-box"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></svg><input id="article-search" type="search" placeholder="Try GPU, AMD, NVIDIA, RAG…" aria-label="Search articles" aria-describedby="search-help" /></div>
+      <p id="search-help" class="search-help">Search by keyword across titles, topics, and note content. Results update as you type.</p>
+    </div>
     <div class="filter-tabs" role="group" aria-label="Filter by topic">{categories.map((category, index) => <button type="button" data-filter={category} aria-pressed={index === 0 ? 'true' : 'false'}>{category}</button>)}</div>
-    <label class="search-box"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></svg><span class="sr-only">Search articles</span><input type="search" placeholder="Find a field note…" aria-label="Search articles" /></label>
   </div>
+  <noscript><p class="search-help">Keyword search needs JavaScript. You can browse all articles below.</p></noscript>
   <div class="library-status" hidden><span role="status" aria-live="polite" data-results></span><button type="button" class="text-link" data-reset hidden>Clear filters ×</button></div>
   <div class="card-grid cols-3">{items.map(item => <ContentCard item={item} />)}</div>
   <div class="empty-state" hidden><span aria-hidden="true">⌕</span><h3>No notes found. Keep exploring.</h3><p>Try another keyword or choose a different topic.</p><button type="button" class="btn" data-reset>Show all notes →</button></div>
@@ -35,7 +40,7 @@ const { items, compact = false } = Astro.props as { items: ContentItem[]; compac
         const matches = cards.filter(card => (selected === 'All notes' || card.dataset.category === selected) && query.split(/\s+/).every(term => card.dataset.search?.includes(term)));
         cards.forEach(card => card.hidden = !matches.includes(card) || matches.indexOf(card) >= limit);
         buttons.forEach(button => button.setAttribute('aria-pressed', String(button.dataset.filter === selected)));
-        this.querySelector<HTMLElement>('[data-results]')!.textContent = `${Math.min(limit, matches.length)} of ${matches.length} notes${selected === 'All notes' ? ' · A little less noise, a little more signal.' : ` in ${selected}`}`;
+        this.querySelector<HTMLElement>('[data-results]')!.textContent = `${Math.min(limit, matches.length)} of ${matches.length} notes${query ? ` matching “${search.value.trim()}”` : ''}${selected === 'All notes' ? '' : ` in ${selected}`}`;
         this.querySelector<HTMLElement>('.empty-state')!.hidden = matches.length !== 0;
         this.querySelector<HTMLElement>('.library-status [data-reset]')!.hidden = !query && selected === 'All notes';
         if (more) more.hidden = matches.length <= limit;
@@ -51,6 +56,7 @@ const { items, compact = false } = Astro.props as { items: ContentItem[]; compac
       this.querySelectorAll('[data-reset]').forEach(button => button.addEventListener('click', () => { selected = 'All notes'; search.value = ''; limit = initialLimit; update(); search.focus(); }));
       more?.addEventListener('click', () => { const next = cards.filter(card => card.hidden && (selected === 'All notes' || card.dataset.category === selected) && search.value.trim().toLowerCase().split(/\s+/).every(term => card.dataset.search?.includes(term)))[0]; limit += initialLimit; update(); next?.querySelector('a')?.focus(); });
       update(false);
+      if (window.location.hash === '#article-search') search.focus();
     }
   }
   customElements.define('article-library', ArticleLibrary);

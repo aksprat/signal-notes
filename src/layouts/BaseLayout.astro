@@ -3,7 +3,7 @@ import '../styles/global.css';
 import { profile } from '../data';
 const { title = 'AIFieldNotes — Less hype. More understanding.', description = 'Practical field notes on LLMs, AI infrastructure, and building things that work. By Akshit Pratiush.' } = Astro.props;
 const path = Astro.url.pathname;
-const navigation = [['/', 'Home'], ['/articles', 'Articles'], ['/videos', 'Watch'], ['/builds', 'Builds'], ['/#about', 'About']];
+const navigation = [['/', 'Home'], ['/articles', 'Articles'], ['/articles#article-search', 'Search'], ['/videos', 'Watch'], ['/builds', 'Builds'], ['/#about', 'About']];
 const canonical = new URL(path, Astro.site ?? Astro.url.origin);
 ---
 <!doctype html>

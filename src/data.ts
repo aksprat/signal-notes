@@ -1,6 +1,7 @@
 export type ContentItem = {
   slug: string; title: string; summary: string; date: string; topics: string[];
   readTime?: string; url?: string; status?: string; thumbnail?: string;
+  searchText?: string;
 };
 
 export const profile = {

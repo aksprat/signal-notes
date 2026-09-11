@@ -5,13 +5,13 @@ import ArticleLibrary from '../components/ArticleLibrary.astro';
 import NoteArt from '../components/NoteArt.astro';
 import { articles, videos, profile } from '../data';
 import { getCollection } from 'astro:content';
-const notes = (await getCollection('articles')).map(entry => ({ ...entry.data, slug: entry.id }));
+const notes = (await getCollection('articles')).map(entry => ({ ...entry.data, slug: entry.id, searchText: entry.body }));
 const featured = notes.find(note => note.featured) || notes[0];
-const curatedOrder = ['tokens', 'rag', 'where-llm-latency-comes-from', 'context-windows', 'agent-safety-and-guardrails', 'tensor-parallelism'];
+const curatedOrder = ['tokens', 'rag', 'gpu-infrastructure-guide', 'where-llm-latency-comes-from', 'context-windows', 'agent-safety-and-guardrails'];
 const library = [...notes].sort((first, second) => (curatedOrder.includes(first.slug) ? curatedOrder.indexOf(first.slug) : 99) - (curatedOrder.includes(second.slug) ? curatedOrder.indexOf(second.slug) : 99));
 const paths = [
   { number: '01', title: 'Understand the fundamentals', copy: 'Tokens, context, and the ideas behind the intelligence.', href: '/articles/tokens', label: 'Start with tokens', icon: '⌘', tone: 'orange' },
-  { number: '02', title: 'Go under the hood', copy: 'Inference, GPUs, and what makes an LLM actually fast.', href: '/articles/where-llm-latency-comes-from', label: 'Explore inference', icon: '↯', tone: 'violet' },
+  { number: '02', title: 'Go under the hood', copy: 'From one GPU server to AMD and NVIDIA clusters, one clear note at a time.', href: '/articles/gpu-infrastructure-guide', label: 'Explore GPU infrastructure', icon: '↯', tone: 'violet' },
   { number: '03', title: 'Connect theory to practice', copy: 'Retrieval, agents, and building AI that earns its keep.', href: '/articles/rag', label: 'Get into RAG', icon: '⌁', tone: 'green' },
 ];
 ---
